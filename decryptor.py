@@ -4,7 +4,7 @@ import time # timing
 class Decryptor():
     topwords = []
     code = ""
-    
+
 
     def __init__(self, code):
         x = time.time()
@@ -21,7 +21,6 @@ class Decryptor():
     def cli(self):
         print("Welcome to the CLI")
         print("What would you like to do? (type H for help)")
-        print("\033[F"*1000)
         
         command = input()
 
