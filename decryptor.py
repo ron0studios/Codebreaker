@@ -27,8 +27,6 @@ class Decryptor():
         pass
 
     def cli(self):
-
-
         print(color.CYAN,"COMMAND=> ",color.END, end="")
         command = input().lower()
         while command not in self.commands:
@@ -40,6 +38,7 @@ class Decryptor():
         
         if command == "h":
             print(color.GREEN,color.BOLD,"WELCOME TO THE HELP PAGE!", color.END)
+            print(color.GREEN)
             print("there are currently 3 commands: ")
             print("h : help")
             print("decrypt : decrypt the input code")
@@ -49,6 +48,14 @@ class Decryptor():
             print("SC : Substitution cipher")
             print("AC : Affine cipher")
             print(color.END)
+        elif command == "decrypt":
+            print(color.YELLOW)
+            print(color.BOLD, "Welcome to the Decryption station!", color.END)
+            print(color.PINK)
+            print("Enter your decryption code:")
+            print("COMMAND=> ", end="")
+            decrypt = input()
+
         
         
         
@@ -72,4 +79,5 @@ class color:
    RED = '\033[91m'
    BOLD = '\033[1m'
    UNDERLINE = '\033[4m'
+   PINK ='\033[95m'
    END = '\033[0m'
