@@ -8,6 +8,7 @@ class Decryptor():
     topwords = []
     code = ""
     commands = ("h", "decrypt", "ciphercheck")
+    cyphersupport = ("caesar", "affine", "substitution")
 
     def __init__(self, code):
         x = time.time()
@@ -54,12 +55,20 @@ class Decryptor():
             print(color.PINK)
             print("Enter your decryption code:")
             print("COMMAND=> ", end="")
-            decrypt = input()
+            output = self.decrypt()
+            print(output)
+            
 
-        
-        
-        
+    # decrypt command cli 
+    def decrypt(self):
+        inp = input().lower()
+        while inp not in self.cyphersupport:
+            print("This is an invalid cypher! Try again:")
+            print("COMMAND=> ", end="")
+            inp = input()
 
+        if inp == "caesar":
+            return self.caesardecode(self.code)
 
     # rates how close the text is to "english"
     def englishity(self) -> float:
