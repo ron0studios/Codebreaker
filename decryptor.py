@@ -90,25 +90,35 @@ class Decryptor():
     # rates how close the text is to "english"
     # uses bigram detection and chi squared formula
     def englishity(self, code) -> float:
+
         total = 0
+
+        # occurences of bigrams in the code
         codecount = {}
+
+        # occurences of bigrams in real life
         realcount = {}
+
+        # creates defaultdict because then the += operator wont work on empty keys
         codecount = defaultdict(lambda:0,codecount)
 
+        # reads file and creates realcount
         with open("bigrams","r") as f:
             for line in f.readlines():
                 x = line.split()
                 realcount[x[0]] = float(x[1][:-1]) # [:-1] to get rid of \n
 
+        # counts bigrams
         for i in range(len(code)-1):
             total += 1
             if code[i]+code[i+1] in realcount:
                 codecount[code[i]+code[i+1]]+=1
         
+        # converts codecount to a percentage instead of raw occurences (so we can compare with realcount)
         for i in codecount.keys():
             codecount[i] = float(codecount[i]/total)
         
-        # chi squared time
+        # chi squared formula, which is basically just standard deviation
         chisquared = 0
         for i in realcount.keys():
             chisquared += pow(codecount[i]-realcount[i],2)/realcount[i]
