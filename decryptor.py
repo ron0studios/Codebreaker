@@ -36,12 +36,14 @@ class Decryptor():
             print(color.END)
             print(color.CYAN,"COMMAND=> ",color.END, end="")
             command = input()
-        
+        if command == "q":
+            quit()
         if command == "h":
             print(color.GREEN,color.BOLD,"WELCOME TO THE HELP PAGE!", color.END)
             print(color.GREEN)
-            print("there are currently 3 commands: ")
+            print("there are currently 4 commands: ")
             print("h : help")
+            print("q : quit")
             print("decrypt : decrypt the input code")
             print("ciphercheck : find out which cipher works best for the code (unfinished)\n")
             print("current decryption methods supported:")
