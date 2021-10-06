@@ -97,19 +97,21 @@ class Decryptor():
                 realcount[x[0]] = float(x[1][:-1]) # [:-1] to get rid of \n
 
         for i in range(len(code)-1):
+            total += 1
             if code[i]+code[i+1] in realcount:
                 codecount[code[i]+code[i+1]]+=1
-                total += 1
         
         for i in codecount.keys():
-            codecount[i] /= total 
+            codecount[i] = float(codecount[i]/total)
         
         # chi squared time
         chisquared = 0
         for i in realcount.keys():
-
             chisquared += pow(codecount[i]-realcount[i],2)/realcount[i]
         
+        print(code)
+        print(codecount)
+        print(realcount)
         return chisquared
 
 
@@ -128,25 +130,40 @@ class Decryptor():
                     new_position = (position - key) % 26
                     new_character = self.ALPHABET[new_position]
                     new_message += new_character
+                else:
+                    new_message += c
             
             decrypted_messages.append(new_message)
             key += 1
 
         optimal_message = ""
-        optimal_englishity = 0
+        optimal_englishity = 10000000000000000
         
+
+        a = time.time()
+        for message in decrypted_messages:
+            val = self.englishity2(message)
+            if val < optimal_englishity:
+                optimal_englishity = val
+                optimal_message = message
+        b = time.time() - a
+
+        print(b, "<= time 1")
+
+        a = time.time()
+        optimal_englishity = 0
         for message in decrypted_messages:
             val = self.englishity(message)
             if val > optimal_englishity:
                 optimal_englishity = val
                 optimal_message = message
+        b = time.time() - a
 
-        # debug
-        for i in decrypted_messages:
-            print(i,self.englishity(i))
-        # end- debug
+        
+        print(b, "<= time 2")
 
         return optimal_message
+        
 
 
 
