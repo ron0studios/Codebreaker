@@ -59,8 +59,13 @@ class Decryptor():
             print(color.PINK)
             print("Enter your decryption code:")
             print("COMMAND=> ", end="")
-            output = self.decrypt()
+            output, timetaken = self.decrypt()
+            print(color.GREEN)
             print(output)
+            print(color.END)
+            print(color.PURPLE)
+            print(f"Time Taken: {color.BOLD}{timetaken}")
+            print(color.END)
             
 
     # decrypt command cli 
@@ -72,20 +77,13 @@ class Decryptor():
             inp = input()
 
         if inp == "caesar":
-            return self.caesardecode(self.CODE)
-
-
-    def englishity(self,code) -> float:
-        topwordcount = 0
-        for i in self.topwords:
-            for j in range(len(code)-len(i)):
-                if code[j:j+len(i)] == i:
-                    topwordcount += 1
-        return topwordcount
+            t1 = time.time()
+            out = self.caesardecode(self.CODE)
+            return out, time.time()-t1
 
     # rates how close the text is to "english"
     # uses bigram detection and chi squared formula
-    def englishity2(self, code) -> float:
+    def englishity(self, code) -> float:
         total = 0
         codecount = {}
         realcount = {}
@@ -109,9 +107,6 @@ class Decryptor():
         for i in realcount.keys():
             chisquared += pow(codecount[i]-realcount[i],2)/realcount[i]
         
-        print(code)
-        print(codecount)
-        print(realcount)
         return chisquared
 
 
@@ -140,28 +135,12 @@ class Decryptor():
         optimal_englishity = 10000000000000000
         
 
-        a = time.time()
         for message in decrypted_messages:
-            val = self.englishity2(message)
+            val = self.englishity(message)
             if val < optimal_englishity:
                 optimal_englishity = val
                 optimal_message = message
-        b = time.time() - a
-
-        print(b, "<= time 1")
-
-        a = time.time()
-        optimal_englishity = 0
-        for message in decrypted_messages:
-            val = self.englishity(message)
-            if val > optimal_englishity:
-                optimal_englishity = val
-                optimal_message = message
-        b = time.time() - a
-
         
-        print(b, "<= time 2")
-
         return optimal_message
         
 
