@@ -1,7 +1,7 @@
 import tkinter as tk
 from decryptor import Decryptor
 
-main = Decryptor("hlasjoaisjdoiajd")
+main = Decryptor("ifmmpuifsfnzobnfjtjssfmfwboujbngspnuiftpvuitjefpgbwfszgbnpvtdjuzboeibwfdpnfupfotmbwfbmmuibuzpvbsfxfmmbdrvbjoufeupjbmtpmjlfupfbuuiftfwfszqpqvmbsdifftfcvshfstcfdbvtfuifzbmmpxgpsnfupxbmlbcpvuuiftdippmbsfbboefokpznzefmjdjpvtmvodixjuipvucfjohjoufssvqufenjetfoufodfxijdijtwfszjodsfejcmzojdf")
 
 while True:
     main.cli()
