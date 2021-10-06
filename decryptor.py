@@ -66,8 +66,14 @@ class Decryptor():
             print(color.PURPLE)
             print(f"Time Taken: {color.BOLD}{timetaken}")
             print(color.END)
+        elif command == "cyphercheck":
+            print(color.YELLOW)
+            print(color.BOLD, "Checking which cypher works best!")
+            print(self.cyphercheck)
             
-
+    def cyphercheck():
+        return "this is unfinished!!!! Sorry"
+    
     # decrypt command cli 
     def decrypt(self):
         inp = input().lower()
