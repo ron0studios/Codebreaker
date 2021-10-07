@@ -1,27 +1,36 @@
 # decrypts stuff in one nice class package
 import time # timing
 from collections import defaultdict # because normal dicts dont support default key-value values
-
+from cipher_solver.simple import SimpleSolver
 
 
 class Decryptor():
-    topwords = []
+    COMMON_WORDS = []
+    BIGRAMS = {}
+    TRIGRAMS = {}
+
     CODE = "" # thanks Chris
     ALPHABET = "abcdefghijklmnopqrstuvwxyz"
-    COMMANDS = ("h", "decrypt", "ciphercheck")
-    CYPHER_SUPPORT = ("caesar", "affine", "substitution")
+    COMMANDS = ("h", "q", "decrypt", "ciphercheck")
+    CYPHER_SUPPORT = ("caesar", "affine", "substitution", "atbash")
+
 
     def __init__(self, code=""):
-        x = time.time()
+        t1 = time.time()
         print(color.GREEN)
-        print("initialising...")
+        print("Initialising...")
         self.CODE = code
-        print("reading commonwords")
-        with open("commonwords","r") as f:
+        print("Loading common words...")
+        with open("common_words", "r") as f:
             for line in f.readlines():
-                self.topwords.append(line[:-1]) # [:-1] because of \n at end of line
-        print("initilised!")
-        print(f"Time taken: {time.time()-x} seconds")
+                self.COMMON_WORDS.append(line[:-1]) # [:-1] to get rid of \n
+        print("Loading bigrams...")
+        with open("bigrams", "r") as f:
+            for line in f.readlines():
+                temp_count_list = line.split()
+                self.BIGRAMS[temp_count_list[0]] = float(temp_count_list[1][:-1]) # [:-1] to get rid of \n
+        print("Initilised!")
+        print(f"Time taken: {time.time()-t1} seconds")
 
         print(color.YELLOW)
         print("Welcome to the CLI")
@@ -34,6 +43,7 @@ class Decryptor():
         print(color.END)
         pass
     
+
     # enjoy this eyesore of a CLI:
     def cli(self):
         print(color.CYAN,"COMMAND=> ",color.END, end="")
@@ -77,9 +87,11 @@ class Decryptor():
             print(color.BOLD, "Checking which cypher works best!")
             print(self.cyphercheck)
             
+
     def cyphercheck():
         return "this is unfinished!!!! Sorry"
     
+
     # decrypt command cli 
     def decrypt(self):
         inp = input().lower()
@@ -90,8 +102,19 @@ class Decryptor():
 
         if inp == "caesar":
             t1 = time.time()
-            out = self.caesardecode(self.CODE)
+            out = self.caesar_decode(self.CODE)
             return out, time.time()-t1
+        elif inp == "substitution":
+            print("SOLVE TYPE => ", end="")
+            method = input()
+            t1 = time.time()
+            out = self.substitution_decode(self.CODE, method=method)
+            return out, time.time()-t1
+        elif inp == "atbash":
+            t1 = time.time()
+            out = self.atbash_decode(self.CODE)
+            return out, time.time()-t1
+
 
     # rates how close the text is to "english"
     # uses bigram detection and chi squared formula
@@ -103,16 +126,10 @@ class Decryptor():
         codecount = {}
 
         # occurences of bigrams in real life
-        realcount = {}
+        realcount = self.BIGRAMS
 
         # creates defaultdict because then the += operator wont work on empty keys
         codecount = defaultdict(lambda:0,codecount)
-
-        # reads file and creates realcount
-        with open("bigrams","r") as f:
-            for line in f.readlines():
-                x = line.split()
-                realcount[x[0]] = float(x[1][:-1]) # [:-1] to get rid of \n
 
         # counts bigrams
         for i in range(len(code)-1):
@@ -128,12 +145,13 @@ class Decryptor():
         chisquared = 0
         for i in realcount.keys():
             chisquared += pow(codecount[i]-realcount[i],2)/realcount[i]
-        
+
         return chisquared
 
 
     # thanks Chris
-    def caesardecode(self, code):
+    # np lol
+    def caesar_decode(self, code):
         key = 1
         decrypted_messages = []
 
@@ -164,8 +182,36 @@ class Decryptor():
                 optimal_message = message
         
         return optimal_message
-        
+    
 
+    def atbash_decode(self, code):
+        reversed_alphabet = self.ALPHABET[::-1]
+        new_message = ""
+
+        for c in code:
+            c = c.lower()
+            if c in self.ALPHABET:
+                position = self.ALPHABET.find(c)
+                new_character = reversed_alphabet[position]
+                new_message += new_character
+            else:
+                new_message += c
+        
+        return new_message
+    
+    
+    def substitution_decode(self, code, method):
+        if method == "random":
+            s = SimpleSolver(code)
+            s.solve()
+            return s.plaintext()
+        elif method == "deterministic":
+            s = SimpleSolver(code)
+            s.solve()
+            return s.plaintext()
+        else:
+            print("Wrong solve method: random / deterministic")
+            return None
 
 
 # output highlighting. Yoinked from stack overflow
