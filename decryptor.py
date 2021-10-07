@@ -13,6 +13,7 @@ class Decryptor():
 
     def __init__(self, code=""):
         x = time.time()
+        print(color.GREEN)
         print("initialising...")
         self.CODE = code
         print("reading commonwords")
@@ -20,7 +21,7 @@ class Decryptor():
             for line in f.readlines():
                 self.topwords.append(line[:-1]) # [:-1] because of \n at end of line
         print("initilised!")
-        print(f"{time.time()-x}")
+        print(f"Time taken: {time.time()-x} seconds")
 
         print(color.YELLOW)
         print("Welcome to the CLI")
@@ -69,7 +70,7 @@ class Decryptor():
             print(output)
             print(color.END)
             print(color.PURPLE)
-            print(f"Time Taken: {color.BOLD}{timetaken}")
+            print(f"Time Taken: {color.BOLD}{timetaken}{color.END}{color.PURPLE} seconds")
             print(color.END)
         elif command == "cyphercheck":
             print(color.YELLOW)
