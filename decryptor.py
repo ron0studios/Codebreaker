@@ -11,7 +11,7 @@ class Decryptor():
     COMMANDS = ("h", "decrypt", "ciphercheck")
     CYPHER_SUPPORT = ("caesar", "affine", "substitution")
 
-    def __init__(self, code):
+    def __init__(self, code=""):
         x = time.time()
         print("initialising...")
         self.CODE = code
@@ -24,6 +24,11 @@ class Decryptor():
 
         print(color.YELLOW)
         print("Welcome to the CLI")
+        while not self.CODE:
+            print(color.RED,"it seems that you haven't set a code yet, please input it below:")
+            print(color.CYAN,"INPUT CODE=> ",color.END, end="")
+            self.CODE = input()
+        
         print("What would you like to do? (type h for help)")
         print(color.END)
         pass
@@ -79,7 +84,7 @@ class Decryptor():
         inp = input().lower()
         while inp not in self.CYPHER_SUPPORT:
             print("This is an invalid cypher! Try again:")
-            print("COMMAND=> ", end="")
+            print("INPUT CYPHER=> ", end="")
             inp = input()
 
         if inp == "caesar":
