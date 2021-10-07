@@ -1,7 +1,7 @@
 # decrypts stuff in one nice class package
 import time # timing
 from collections import defaultdict # because normal dicts dont support default key-value values
-from cipher_solver.simple import SimpleSolver
+from substitution import Substitution
 
 
 class Decryptor():
@@ -12,7 +12,7 @@ class Decryptor():
     CODE = "" # thanks Chris
     ALPHABET = "abcdefghijklmnopqrstuvwxyz"
     COMMANDS = ("h", "q", "decrypt", "ciphercheck")
-    CYPHER_SUPPORT = ("caesar", "affine", "substitution", "atbash")
+    CYPHER_SUPPORT = ("caesar", "affine", "substitution")
 
 
     def __init__(self, code=""):
@@ -105,14 +105,8 @@ class Decryptor():
             out = self.caesar_decode(self.CODE)
             return out, time.time()-t1
         elif inp == "substitution":
-            print("SOLVE TYPE => ", end="")
-            method = input()
             t1 = time.time()
-            out = self.substitution_decode(self.CODE, method=method)
-            return out, time.time()-t1
-        elif inp == "atbash":
-            t1 = time.time()
-            out = self.atbash_decode(self.CODE)
+            out = self.substitution_decode(self.CODE)
             return out, time.time()-t1
 
 
@@ -148,6 +142,10 @@ class Decryptor():
 
         return chisquared
 
+    def substitution_decode(self,code):
+        decoder = Substitution(code)
+        output = decoder.solve()
+        return output
 
     # thanks Chris
     # np lol
@@ -183,36 +181,6 @@ class Decryptor():
         
         return optimal_message
     
-
-    def atbash_decode(self, code):
-        reversed_alphabet = self.ALPHABET[::-1]
-        new_message = ""
-
-        for c in code:
-            c = c.lower()
-            if c in self.ALPHABET:
-                position = self.ALPHABET.find(c)
-                new_character = reversed_alphabet[position]
-                new_message += new_character
-            else:
-                new_message += c
-        
-        return new_message
-    
-    
-    def substitution_decode(self, code, method):
-        if method == "random":
-            s = SimpleSolver(code)
-            s.solve()
-            return s.plaintext()
-        elif method == "deterministic":
-            s = SimpleSolver(code)
-            s.solve()
-            return s.plaintext()
-        else:
-            print("Wrong solve method: random / deterministic")
-            return None
-
 
 # output highlighting. Yoinked from stack overflow
 class color:
