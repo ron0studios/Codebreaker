@@ -13,7 +13,7 @@ Opz jvuaypibapvuz olswlk shf aol mvbukhapvuz mvy hss tvklyu iyhujolz vm wofzpjz,
     "atbash": "Yb hdzkkrmt vzxs ovggvi drgs z nriilivw evihrlm lu gsv zokszyvg, z yvxlnvh a, y yvxlnvh b zmw hl lm, gsrh hrnkov xrksvi xzm ollp jfrgv xlmufhrmt"
     }
 
-main = Decryptor(test_encryptions["substitution"])
+main = Decryptor(test_encryptions["caesar"])
 
 while True:
     main.cli()
